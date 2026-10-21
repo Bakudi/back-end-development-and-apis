@@ -13,6 +13,34 @@ app.get("/", (_req, res) => {
 
 // Do not change code above this line
 
+
+function sendTimestamp(req, res) {
+  const dateParam = req.params.date;
+
+  let date;
+
+  if (dateParam === undefined) {
+    date = new Date();
+  } else if (/^\d+$/.test(dateParam)) {
+    date = new Date(Number(dateParam));
+  } else {
+    date = new Date(dateParam);
+  }
+
+  if (Number.isNaN(date.getTime())) {
+    return res.json({ error: "Invalid Date" });
+  }
+
+  return res.json({
+    unix: date.getTime(),
+    utc: date.toUTCString()
+  });
+}
+
+app.get("/api", sendTimestamp);
+app.get("/api/:date", sendTimestamp);
+
+
 // Do not change code below this line
 
 const PORT = 8000;
