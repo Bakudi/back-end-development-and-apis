@@ -20,7 +20,7 @@ export function findByUsername(username) {
 }
 
 export function findById(id) {
-  return users.find((u) => u.id === id) || null;
+  return users.find((u) => String(u.id) === String(id)) || null;
 }
 
 export function getWatchlist(userId) {
@@ -40,7 +40,10 @@ export function addMovie(userId, movieData) {
 
   const watchlists = readWatchlists();
   const list = watchlists[userId] || [];
-  const newId = list.length > 0 ? Math.max(...list.map((m) => m.id)) + 1 : 1;
+  const newId =
+  list.length > 0
+    ? Math.max(...list.map((m) => Number(m.id))) + 1
+    : 1;
 
   const movie = {
     id: newId,
@@ -63,7 +66,7 @@ export function updateMovie(userId, movieId, updates) {
 
   const watchlists = readWatchlists();
   const list = watchlists[userId] || [];
-  const index = list.findIndex((m) => m.id === movieId);
+  const index = list.findIndex((m) => Number(m.id) === Number(movieId));
 
   if (index === -1) {
     return null;
@@ -82,7 +85,7 @@ export function deleteMovie(userId, movieId) {
   }
   const watchlists = readWatchlists();
   const list = watchlists[userId] || [];
-  const index = list.findIndex((m) => m.id === movieId);
+  const index = list.findIndex((m) => Number(m.id) === Number(movieId));
 
   if (index === -1) {
     return null;
